@@ -102,7 +102,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       )}
       <aside className={`sidebar ${mobile ? "open" : ""}`}>
         <div className="sidebar-brand">
-          <Link href="/clinic" aria-label="Voxa home">
+          <Link href="/clinic" aria-label="Sia home">
             <Logo />
           </Link>
           <button
@@ -263,7 +263,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <footer className="app-footer">
           <span>Made for meaningful conversations.</span>
           <span>
-            Voxa studio <span className="footer-dot">·</span> Powered by Sarvam
+            Sia studio <span className="footer-dot">·</span> Powered by Sarvam
             AI
           </span>
         </footer>

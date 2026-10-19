@@ -1,3 +1,4 @@
+export const PRODUCT_NAME = "Sia";
 // Fixed frontend policy. Deployment origins and ICE credentials stay in env.
 export const API_ORIGIN = (
   process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"
@@ -5,10 +6,10 @@ export const API_ORIGIN = (
 export const ICE_SERVERS: RTCIceServer[] = JSON.parse(
   process.env.NEXT_PUBLIC_ICE_SERVERS || "[]",
 );
-export const TOKEN_KEY = "voxa_access_token";
-export const WORKSPACE_KEY = "voxa-organization";
-export const THEME_KEY = "voxa-theme";
-export const DEFAULT_MEETING_VOICE_NAME = "Sia";
+export const TOKEN_KEY = "sia_access_token";
+export const WORKSPACE_KEY = "sia-organization";
+export const THEME_KEY = "sia-theme";
+export const DEFAULT_MEETING_VOICE_NAME = PRODUCT_NAME;
 export const REQUEST_TIMEOUT_MS = 45_000;
 export const VOICE_CONNECT_TIMEOUT_MS = 45_000;
 export const MEETING_POLL_MS = 3_000;
@@ -34,3 +35,8 @@ export const languages = [
   ["od-IN", "Odia"],
   ["pa-IN", "Punjabi"],
 ];
+
+// Read existing browser state during the product rename.
+export const LEGACY_TOKEN_KEY = "voxa_access_token";
+export const LEGACY_WORKSPACE_KEY = "voxa-organization";
+export const LEGACY_THEME_KEY = "voxa-theme";

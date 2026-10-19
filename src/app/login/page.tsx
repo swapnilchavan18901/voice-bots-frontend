@@ -81,7 +81,7 @@ function LoginForm() {
       </section>
       <section className="login-form-panel">
         <div className="login-form-wrap">
-          <span className="eyebrow">WELCOME TO VOXA</span>
+          <span className="eyebrow">WELCOME TO SIA</span>
           <h2>
             {register ? "Let’s build your voice." : "Good to hear from you."}
           </h2>
@@ -141,7 +141,7 @@ function LoginForm() {
             </button>
           </form>
           <div className="auth-switch">
-            {register ? "Already have an account?" : "New to Voxa?"}{" "}
+            {register ? "Already have an account?" : "New to Sia?"}{" "}
             <button
               onClick={() => {
                 setRegister(!register);

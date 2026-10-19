@@ -1,4 +1,4 @@
-# Voxa Frontend
+# Sia Frontend
 
 ## Architecture
 

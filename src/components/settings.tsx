@@ -568,7 +568,7 @@ export function Integration() {
   const [selected, setSelected] = useState(w.bots[0]?.id || "");
   const platform = API_ORIGIN;
   const bot = w.bots.find((b) => b.id === selected);
-  const tokenCode = `// Run on YOUR server. Never expose this key to the browser.\nconst response = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_BOT_ID"}/session-token",\n  {\n    method: "POST",\n    headers: { "X-API-Key": process.env.VOXA_API_KEY }\n  }\n);\nif (!response.ok) throw new Error("Token request failed");\nconst { token } = await response.json();\n// Return { token } from your own authenticated/rate-limited endpoint.`;
+  const tokenCode = `// Run on YOUR server. Never expose this key to the browser.\nconst response = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_BOT_ID"}/session-token",\n  {\n    method: "POST",\n    headers: { "X-API-Key": process.env.SIA_API_KEY }\n  }\n);\nif (!response.ok) throw new Error("Token request failed");\nconst { token } = await response.json();\n// Return { token } from your own authenticated/rate-limited endpoint.`;
   const browserCode = `// Browser: exchange a full SDP offer for an answer.\n// First get a short-lived token from YOUR server.\nconst response = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_BOT_ID"}/webrtc/offer",\n  {\n    method: "POST",\n    headers: {\n      "Authorization": \`Bearer \${token}\`,\n      "Content-Type": "application/json"\n    },\n    body: JSON.stringify(pc.localDescription)\n  }\n);\nif (!response.ok) throw new Error("WebRTC negotiation failed");\nconst { sdp, type, pc_id } = await response.json();\nawait pc.setRemoteDescription({ sdp, type });`;
   return (
     <>
@@ -625,7 +625,7 @@ export function Integration() {
           <div>
             <h2>Create a server-side API key</h2>
             <p>
-              Store it in your server environment as <code>VOXA_API_KEY</code>.
+              Store it in your server environment as <code>SIA_API_KEY</code>.
             </p>
           </div>
           <Link className="button secondary small" href="/api-keys">
