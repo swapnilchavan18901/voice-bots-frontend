@@ -3,3 +3,9 @@ node_modules/
 .env*
 !.env.example
 *.tsbuildinfo
+
+# Local verification and machine artifacts
+/tests/
+coverage/
+.DS_Store
+*.log
