@@ -1,4 +1,5 @@
 "use client";
+import { languages } from "@/constants/constants";
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -15,12 +16,9 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { readClinicContext, saveClinicContext } from "@/utils/clinic-context";
 import { useWorkspace } from "./workspace";
-import {
-  ClinicContextFields,
-  readClinicContext,
-  saveClinicContext,
-} from "./clinic-context";
+import { ClinicContextFields } from "./clinic-context";
 import {
   CopyButton,
   Empty,
@@ -30,7 +28,7 @@ import {
   Spinner,
   TemplateIcon,
 } from "./ui";
-import { Bot, languages, Template } from "@/lib/types";
+import { Bot, Template } from "@/lib/types";
 import { createBot, updateBot, deleteBot, message } from "@/lib/api";
 
 function kind(template?: Template) {

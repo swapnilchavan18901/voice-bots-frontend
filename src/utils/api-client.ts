@@ -1,3 +1,8 @@
+import {
+  API_ORIGIN,
+  REQUEST_TIMEOUT_MS,
+  TOKEN_KEY,
+} from "@/constants/constants";
 import axios from "axios";
 
 class ApiError extends Error {
@@ -9,8 +14,6 @@ class ApiError extends Error {
     this.name = "ApiError";
   }
 }
-
-const TOKEN_KEY = "voxa_access_token";
 
 export function getAccessToken() {
   if (typeof document === "undefined") return null;
@@ -44,12 +47,10 @@ export function setAccessToken(token: string | null) {
 }
 
 // The origin is configured once; exported API functions supply relative endpoints.
-export const API_ORIGIN = (
-  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"
-).replace(/\/$/, "");
+
 export const apiClient = axios.create({
   baseURL: `${API_ORIGIN}/api/v1`,
-  timeout: 45000,
+  timeout: REQUEST_TIMEOUT_MS,
   headers: { "Content-Type": "application/json" },
 });
 

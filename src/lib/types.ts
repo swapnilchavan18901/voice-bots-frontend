@@ -25,19 +25,6 @@ export type ApiKey = {
   revoked_at: string | null;
 };
 export type Invite = { id: string; token: string; expires_at: string };
-export const languages = [
-  ["en-IN", "English"],
-  ["hi-IN", "Hindi"],
-  ["mr-IN", "Marathi"],
-  ["ta-IN", "Tamil"],
-  ["te-IN", "Telugu"],
-  ["bn-IN", "Bengali"],
-  ["gu-IN", "Gujarati"],
-  ["kn-IN", "Kannada"],
-  ["ml-IN", "Malayalam"],
-  ["od-IN", "Odia"],
-  ["pa-IN", "Punjabi"],
-];
 export type Meeting = {
   id: string;
   organization_id: string;
@@ -137,3 +124,59 @@ export type ClinicRegister = {
   registered_count: number;
   visited_count: number;
 };
+
+export type TranscriptMessage = {
+  id: string;
+  role: "user" | "bot";
+  text: string;
+};
+export type VoiceSession = {
+  pc: RTCPeerConnection;
+  stream?: MediaStream;
+  pcId?: string;
+  organizationId: string;
+  botId: string;
+  abort: AbortController;
+  timer?: ReturnType<typeof setTimeout>;
+};
+
+export type ClinicDraft = {
+  name: string;
+  address: string;
+  phone: string;
+  fees: string;
+  parking: string;
+  booking: string;
+  timezone: string;
+  working_days: number[];
+  open_time: string;
+  close_time: string;
+  lunch_start: string;
+  lunch_end: string;
+  slot_minutes: string;
+  doctors: string;
+};
+
+export type WorkspaceContext = {
+  user: User | null;
+  orgs: Organization[];
+  org: Organization | null;
+  templates: Template[];
+  bots: Bot[];
+  members: Member[];
+  loading: boolean;
+  error: string;
+  role: string;
+  canManage: boolean;
+  canInviteAdmins: boolean;
+  features: WorkspaceData["features"];
+  isOperator: boolean;
+  manualJoinReady: boolean;
+  meetingVoiceName: string;
+  selectOrg: (id: string) => void;
+  refresh: () => Promise<void>;
+  notify: (text: string) => void;
+  toast: string;
+};
+
+export type BotInput = Pick<Bot, "name" | "company_context" | "language">;

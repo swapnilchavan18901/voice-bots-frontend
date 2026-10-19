@@ -1,4 +1,5 @@
-import { apiClient, setAccessToken } from "./api-client";
+import type { BotInput } from "./types";
+import { apiClient, setAccessToken } from "@/utils/api-client";
 import type {
   ApiKey,
   AuthResponse,
@@ -20,7 +21,7 @@ import type {
   VoiceAnswer,
 } from "./types";
 
-export { message } from "./api-client";
+export { message } from "@/utils/api-client";
 
 const orgPath = (orgId: string) =>
   `/organizations/${encodeURIComponent(orgId)}`;
@@ -61,7 +62,7 @@ export async function getMeetingCapabilities() {
   return (await apiClient.get<MeetingCapabilities>("/meeting-capabilities"))
     .data;
 }
-type BotInput = Pick<Bot, "name" | "company_context" | "language">;
+
 export async function createBot(
   orgId: string,
   data: BotInput & { template_id: string },

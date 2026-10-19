@@ -1,4 +1,10 @@
 "use client";
+import {
+  LIVE_MEETING_STATUSES,
+  MEETING_POLL_MS,
+  MEMORY_POLL_MS,
+} from "@/constants/constants";
+import { meetingDate } from "@/utils/format";
 
 import { useCallback, useEffect, useState } from "react";
 import { CalendarDays, Inbox, RefreshCw, ArrowUpRight } from "lucide-react";
@@ -26,14 +32,6 @@ import {
 import { useWorkspace } from "./workspace";
 import { Empty, ErrorNotice, Modal, PageTitle, Spinner } from "./ui";
 
-function date(value: string | null) {
-  if (!value) return "No scheduled time";
-  const normalized = /(?:Z|[+-]\d\d:\d\d)$/.test(value) ? value : value + "Z";
-  return new Date(normalized).toLocaleString(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
-}
 function MeetLink({ url }: { url: string | null }) {
   if (!url || !/^https:\/\/meet\.google\.com\//.test(url)) return null;
   return (
@@ -77,14 +75,6 @@ function Pages({
   );
 }
 
-const liveStatuses = [
-  "starting",
-  "joining",
-  "waiting",
-  "connected",
-  "stopping",
-];
-
 function JoinControls({ meeting }: { meeting: Meeting }) {
   const w = useWorkspace();
   const [connection, setConnection] = useState<MeetingConnection>({
@@ -108,7 +98,7 @@ function JoinControls({ meeting }: { meeting: Meeting }) {
       } catch (e) {
         if (active) setError(message(e));
       }
-      if (active) timer = setTimeout(poll, 3000);
+      if (active) timer = setTimeout(poll, MEETING_POLL_MS);
     }
     void poll();
     return () => {
@@ -150,7 +140,7 @@ function JoinControls({ meeting }: { meeting: Meeting }) {
       setBusy(false);
     }
   }
-  const active = liveStatuses.includes(connection.status);
+  const active = LIVE_MEETING_STATUSES.includes(connection.status);
   return (
     <div className="meeting-join-controls">
       {connection.memory_error && (
@@ -226,7 +216,7 @@ function Memory({ orgId }: { orgId: string }) {
       } catch (e) {
         if (active) setError(message(e));
       }
-      if (active) timer = setTimeout(poll, 10000);
+      if (active) timer = setTimeout(poll, MEMORY_POLL_MS);
     }
     void poll();
     return () => {
@@ -339,7 +329,8 @@ export function Meetings({ testGround = false }: { testGround?: boolean }) {
                     <div className="meeting-row-content">
                       <h3>{item.title}</h3>
                       <p>
-                        {date(item.starts_at)} – {date(item.ends_at)}
+                        {meetingDate(item.starts_at)} –{" "}
+                        {meetingDate(item.ends_at)}
                       </p>
                       <span className="status-pill">
                         {item.status === "scheduled"
@@ -367,7 +358,7 @@ export function Meetings({ testGround = false }: { testGround?: boolean }) {
       {selected && (
         <Modal
           title={selected.title}
-          subtitle={date(selected.starts_at)}
+          subtitle={meetingDate(selected.starts_at)}
           onClose={() => setSelected(null)}
         >
           <div className="meeting-details">
@@ -488,7 +479,7 @@ export function CalendarInbox() {
                 <h3>{status?.email || "Google account not connected"}</h3>
                 <p>
                   {status?.calendars.length
-                    ? `Last calendar sync: ${date(status.calendars[0].last_synced_at)}`
+                    ? `Last calendar sync: ${meetingDate(status.calendars[0].last_synced_at)}`
                     : "No calendar synced yet."}
                 </p>
                 {status?.status !== "connected" && (
@@ -522,7 +513,7 @@ export function CalendarInbox() {
                     </div>
                     <div className="meeting-row-content">
                       <h3>{item.title || "Untitled event"}</h3>
-                      <p>{date(item.starts_at)}</p>
+                      <p>{meetingDate(item.starts_at)}</p>
                       {!item.meet_url && (
                         <span className="status-pill">No Google Meet link</span>
                       )}

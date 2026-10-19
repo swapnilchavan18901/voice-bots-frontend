@@ -1,4 +1,5 @@
 "use client";
+import { shortDate } from "@/utils/format";
 import { useEffect, useState } from "react";
 import {
   ArrowRight,
@@ -31,14 +32,8 @@ import {
   acceptInvitation,
   message,
 } from "@/lib/api";
-import { API_ORIGIN } from "@/lib/api-client";
+import { API_ORIGIN } from "@/constants/constants";
 import { ApiKey, Invite, Member } from "@/lib/types";
-const date = (value: string) =>
-  new Date(value).toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
 
 export function Keys() {
   const w = useWorkspace();
@@ -173,7 +168,7 @@ export function Keys() {
                         <b>{k.name}</b>
                       </span>
                       <small className="table-sub">
-                        Created {date(k.created_at)}
+                        Created {shortDate(k.created_at)}
                       </small>
                     </td>
                     <td>
@@ -188,7 +183,7 @@ export function Keys() {
                             : "Expired"}
                       </span>
                     </td>
-                    <td>{date(k.expires_at)}</td>
+                    <td>{shortDate(k.expires_at)}</td>
                     <td>
                       {active && (
                         <button
@@ -516,7 +511,7 @@ export function Team() {
       {invite && (
         <Modal
           title="Invitation ready"
-          subtitle={`Share this token privately. It expires ${date(invite.expires_at)}.`}
+          subtitle={`Share this token privately. It expires ${shortDate(invite.expires_at)}.`}
           onClose={() => setInvite(null)}
         >
           <div className="secret-box">

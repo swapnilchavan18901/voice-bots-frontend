@@ -1,5 +1,11 @@
 "use client";
 import {
+  WORKSPACE_KEY,
+  TOAST_DURATION_MS,
+  DEFAULT_MEETING_VOICE_NAME,
+} from "@/constants/constants";
+import type { WorkspaceContext } from "@/lib/types";
+import {
   createContext,
   useCallback,
   useContext,
@@ -15,37 +21,13 @@ import {
   getWorkspace,
   message,
 } from "@/lib/api";
-import { getAccessToken } from "@/lib/api-client";
+import { getAccessToken } from "@/utils/api-client";
 import {
-  Bot,
-  Member,
   Organization,
-  Template,
   User,
   WorkspaceData,
 } from "@/lib/types";
-type Context = {
-  user: User | null;
-  orgs: Organization[];
-  org: Organization | null;
-  templates: Template[];
-  bots: Bot[];
-  members: Member[];
-  loading: boolean;
-  error: string;
-  role: string;
-  canManage: boolean;
-  canInviteAdmins: boolean;
-  features: WorkspaceData["features"];
-  isOperator: boolean;
-  manualJoinReady: boolean;
-  meetingVoiceName: string;
-  selectOrg: (id: string) => void;
-  refresh: () => Promise<void>;
-  notify: (text: string) => void;
-  toast: string;
-};
-const Workspace = createContext<Context | null>(null);
+const Workspace = createContext<WorkspaceContext | null>(null);
 export const useWorkspace = () => {
   const value = useContext(Workspace);
   if (!value) throw new Error("Missing workspace");
@@ -53,7 +35,9 @@ export const useWorkspace = () => {
 };
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const [meetingVoiceName, setMeetingVoiceName] = useState("Voxa");
+  const [meetingVoiceName, setMeetingVoiceName] = useState(
+    DEFAULT_MEETING_VOICE_NAME,
+  );
   const [manualJoinReady, setManualJoinReady] = useState(false);
   const [isOperator, setIsOperator] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -87,8 +71,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         listOrganizations(),
         getMeetingCapabilities(),
       ]);
-      const preferred =
-        selected.current || localStorage.getItem("voxa-organization");
+      const preferred = selected.current || localStorage.getItem(WORKSPACE_KEY);
       const id =
         organizations.find((o) => o.id === preferred)?.id ||
         organizations[0]?.id ||
@@ -99,10 +82,12 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setUser(me);
       setIsOperator(capabilities.operator);
       setManualJoinReady(capabilities.manual_join_ready);
-      setMeetingVoiceName(capabilities.voice_name || "Voxa");
+      setMeetingVoiceName(
+        capabilities.voice_name || DEFAULT_MEETING_VOICE_NAME,
+      );
       setOrgs(organizations);
       setWorkspace(data);
-      if (id) localStorage.setItem("voxa-organization", id);
+      if (id) localStorage.setItem(WORKSPACE_KEY, id);
     } catch (e) {
       if (run === generation.current) setError(message(e));
     } finally {
@@ -114,7 +99,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   }, [refresh]);
   useEffect(() => {
     if (!toast) return;
-    const timer = setTimeout(() => setToast(""), 4000);
+    const timer = setTimeout(() => setToast(""), TOAST_DURATION_MS);
     return () => clearTimeout(timer);
   }, [toast]);
   const selectOrg = (id: string) => {

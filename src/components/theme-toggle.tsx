@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 
-const key = "voxa-theme";
+import { THEME_KEY as key } from "@/constants/constants";
 function subscribe(update: () => void) {
   const media = window.matchMedia("(prefers-color-scheme: dark)");
   function syncSystem() {

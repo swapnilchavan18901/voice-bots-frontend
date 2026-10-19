@@ -1,4 +1,10 @@
 "use client";
+import {
+  languages,
+  ICE_SERVERS,
+  VOICE_CONNECT_TIMEOUT_MS,
+} from "@/constants/constants";
+import type { TranscriptMessage, VoiceSession } from "@/lib/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -27,17 +33,7 @@ import {
   TemplateIcon,
   Wave,
 } from "./ui";
-import { languages, ClinicInfo } from "@/lib/types";
-type TranscriptMessage = { id: string; role: "user" | "bot"; text: string };
-type Live = {
-  pc: RTCPeerConnection;
-  stream?: MediaStream;
-  pcId?: string;
-  organizationId: string;
-  botId: string;
-  abort: AbortController;
-  timer?: ReturnType<typeof setTimeout>;
-};
+import { ClinicInfo } from "@/lib/types";
 export function Playground({
   feature = "conversation",
 }: {
@@ -59,7 +55,7 @@ export function Playground({
   const [clinicInfo, setClinicInfo] = useState<ClinicInfo | null>(null);
   const [transcript, setTranscript] = useState<TranscriptMessage[]>([]);
   const [speaking, setSpeaking] = useState<"none" | "user" | "bot">("none");
-  const live = useRef<Live | null>(null);
+  const live = useRef<VoiceSession | null>(null);
   const attempt = useRef(0);
   const audio = useRef<HTMLAudioElement>(null);
   const bot = bots.find((b) => b.id === selected);
@@ -122,11 +118,8 @@ export function Playground({
         throw new Error(
           "Microphone access requires HTTPS or localhost and a supported browser.",
         );
-      const iceServers: RTCIceServer[] = JSON.parse(
-        process.env.NEXT_PUBLIC_ICE_SERVERS || "[]",
-      );
-      const pc = new RTCPeerConnection({ iceServers });
-      const call: Live = {
+      const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+      const call: VoiceSession = {
         pc,
         organizationId: w.org.id,
         botId: bot.id,
@@ -141,7 +134,7 @@ export function Playground({
           );
           setStatus("ended");
         }
-      }, 45000);
+      }, VOICE_CONNECT_TIMEOUT_MS);
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true },
       });
@@ -531,8 +524,8 @@ export function Playground({
           <Link href={feature === "clinic" ? "/clinic" : "/agents"}>
             My agents
           </Link>{" "}
-          to fine-tune the experience. Live voice requires the backend’s Sarvam
-          API key.
+          to fine-tune the experience. VoiceSession voice requires the backend’s
+          Sarvam API key.
         </p>
       </div>
     </>
