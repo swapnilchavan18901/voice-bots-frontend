@@ -185,3 +185,30 @@ export type WorkspaceContext = {
 };
 
 export type BotInput = Pick<Bot, "name" | "company_context" | "language">;
+
+export type ClinicPhoneCapabilities = {
+  can_view_route: boolean;
+  can_manage_route: boolean;
+  can_call: boolean;
+  inbound_ready: boolean;
+  outbound_ready: boolean;
+};
+export type ClinicPhoneRoute = {
+  id: string;
+  bot_id: string;
+  phone_number: string;
+  enabled: boolean;
+  inbound_stream_url: string | null;
+};
+export type ClinicPhoneCall = {
+  id: string;
+  bot_id: string;
+  direction: "inbound" | "outbound";
+  phone_number: string;
+  status: "dialing" | "unknown" | "queued" | "ringing" | "in-progress" |
+    "completed" | "failed" | "busy" | "no-answer" | "cancelled";
+  provider_call_sid: string | null;
+  error: string | null;
+  created_at: string;
+  finished_at: string | null;
+};

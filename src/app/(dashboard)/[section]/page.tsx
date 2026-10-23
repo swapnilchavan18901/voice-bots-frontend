@@ -4,6 +4,7 @@ import { Agents, Templates } from "@/components/agents";
 import { Team, Keys, Integration } from "@/components/settings";
 import { Patients } from "@/components/patients";
 import { Playground } from "@/components/playground";
+import { ClinicPhone } from "@/components/clinic-phone";
 export default async function Page({
   params,
 }: {
@@ -14,6 +15,7 @@ export default async function Page({
     agents: <Agents />,
     clinic: <Agents feature="clinic" />,
     patients: <Patients />,
+    "clinic-phone": <ClinicPhone />,
     "clinic-test-ground": <Playground feature="clinic" />,
     "meeting-test-ground": <Meetings testGround />,
     meetings: <Meetings />,

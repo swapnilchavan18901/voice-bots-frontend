@@ -9,6 +9,9 @@ import type {
   ClinicInfo,
   ClinicPatient,
   ClinicRegister,
+  ClinicPhoneCapabilities,
+  ClinicPhoneRoute,
+  ClinicPhoneCall,
   WorkspaceData,
   Invite,
   Meeting,
@@ -255,4 +258,28 @@ export async function getClinicRegister(
       },
     )
   ).data;
+}
+
+export async function getClinicPhoneCapabilities(orgId: string, botId: string, signal?: AbortSignal) {
+  return (await apiClient.get<ClinicPhoneCapabilities>(`${botPath(orgId, botId)}/phone/capabilities`, { signal })).data;
+}
+export async function getClinicPhoneRoute(orgId: string, botId: string, signal?: AbortSignal) {
+  try {
+    return (await apiClient.get<ClinicPhoneRoute>(`${botPath(orgId, botId)}/phone/route`, { signal })).data;
+  } catch (error) {
+    if (error && typeof error === "object" && "status" in error && error.status === 404) return null;
+    throw error;
+  }
+}
+export async function setClinicPhoneRoute(orgId: string, botId: string, data: { phone_number: string; enabled: boolean }) {
+  return (await apiClient.put<ClinicPhoneRoute>(`${botPath(orgId, botId)}/phone/route`, data)).data;
+}
+export async function listClinicPhoneCalls(orgId: string, botId: string, offset: number, limit: number, signal?: AbortSignal) {
+  return (await apiClient.get<ClinicPhoneCall[]>(`${botPath(orgId, botId)}/phone/calls`, { params: { offset, limit }, signal })).data;
+}
+export async function dialClinicPhone(orgId: string, botId: string, data: { phone_number: string; request_id: string }) {
+  return (await apiClient.post<ClinicPhoneCall>(`${botPath(orgId, botId)}/phone/calls`, data)).data;
+}
+export async function reconcileClinicPhoneCall(orgId: string, botId: string, callId: string, data: { provider_call_sid: string } | { confirmed_not_placed: true }) {
+  return (await apiClient.post<ClinicPhoneCall>(`${botPath(orgId, botId)}/phone/calls/${encodeURIComponent(callId)}/reconcile`, data)).data;
 }

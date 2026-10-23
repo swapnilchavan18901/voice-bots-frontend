@@ -303,6 +303,11 @@ export function Agents({
                     </code>
                     <CopyButton value={bot.id} label="Copy ID" />
                   </div>
+                  {feature === "clinic" && (
+                    <Link href={`/clinic-phone?bot=${bot.id}`} className="text-link clinic-phone-card-link">
+                      Phone settings & call history <ArrowRight size={14} />
+                    </Link>
+                  )}
                   <div className="card-bottom">
                     <Link
                       href={`${feature === "clinic" ? "/clinic-test-ground" : "/playground"}?bot=${bot.id}`}

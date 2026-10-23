@@ -15,6 +15,7 @@ import {
   Menu,
   Plus,
   Radio,
+  Phone,
   Users,
   ArrowUpRight,
   CheckCircle2,
@@ -31,6 +32,7 @@ const groups = [
     links: [
       { href: "/clinic", label: "Clinic setup", icon: AudioLines },
       { href: "/patients", label: "Daily patients", icon: Users },
+      { href: "/clinic-phone", label: "Phone calls", icon: Phone },
       { href: "/clinic-test-ground", label: "Test ground", icon: Radio },
     ],
   },
