@@ -30,12 +30,17 @@ export type Meeting = {
   organization_id: string;
   title: string;
   meet_url: string;
-  starts_at: string;
-  ends_at: string;
+  starts_at: string | null;
+  ends_at: string | null;
   timezone: string;
   agenda: string;
   status: string;
   auto_join: boolean;
+  is_recurring: boolean;
+  next_occurrence_id: string | null;
+  next_starts_at: string | null;
+  next_ends_at: string | null;
+  next_meet_url: string | null;
 };
 export type CalendarEvent = {
   id: string;

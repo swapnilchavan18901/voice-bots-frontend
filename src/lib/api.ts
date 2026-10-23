@@ -154,7 +154,6 @@ export async function assignCalendarEvent(
     organization_id: string;
     agenda: string;
     auto_join: boolean;
-    assign_series: boolean;
   },
 ) {
   return (

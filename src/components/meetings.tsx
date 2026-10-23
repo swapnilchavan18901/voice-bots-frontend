@@ -180,7 +180,7 @@ function JoinControls({ meeting }: { meeting: Meeting }) {
       {w.isOperator &&
         !active &&
         meeting.status === "scheduled" &&
-        new Date(meeting.ends_at) > new Date() && (
+        (meeting.is_recurring || (meeting.ends_at && new Date(meeting.ends_at) > new Date())) && (
           <button
             className="button secondary small"
             disabled={busy}
@@ -329,8 +329,10 @@ export function Meetings({ testGround = false }: { testGround?: boolean }) {
                     <div className="meeting-row-content">
                       <h3>{item.title}</h3>
                       <p>
-                        {meetingDate(item.starts_at)} –{" "}
-                        {meetingDate(item.ends_at)}
+                        {item.starts_at
+                          ? `${meetingDate(item.starts_at)} – ${meetingDate(item.ends_at)}`
+                          : "No upcoming session in the calendar window"}
+                        {item.is_recurring && " · Recurring"}
                       </p>
                       <span className="status-pill">
                         {item.status === "scheduled"
@@ -366,7 +368,7 @@ export function Meetings({ testGround = false }: { testGround?: boolean }) {
             <p className="meeting-agenda">
               {selected.agenda || "No agenda added yet."}
             </p>
-            <MeetLink url={selected.meet_url} />
+            <MeetLink url={selected.next_meet_url ?? selected.meet_url} />
           </div>
         </Modal>
       )}
@@ -386,7 +388,6 @@ export function CalendarInbox() {
   const [orgId, setOrgId] = useState("");
   const [agenda, setAgenda] = useState("");
   const [autoJoin, setAutoJoin] = useState(true);
-  const [assignSeries, setAssignSeries] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
   const [revision, setRevision] = useState(0);
@@ -427,7 +428,6 @@ export function CalendarInbox() {
         organization_id: orgId,
         agenda,
         auto_join: autoJoin,
-        assign_series: assignSeries,
       });
       setSelected(null);
       setOffset(0);
@@ -528,7 +528,6 @@ export function CalendarInbox() {
                         setOrgId(orgs.length === 1 ? orgs[0].id : "");
                         setAgenda("");
                         setAutoJoin(true);
-                        setAssignSeries(false);
                         setFormError("");
                       }}
                     >
@@ -594,16 +593,7 @@ export function CalendarInbox() {
               </span>
             </label>
             {selected.recurring_event_id && (
-              <label className="field">
-                <span>
-                  <input
-                    type="checkbox"
-                    checked={assignSeries}
-                    onChange={(e) => setAssignSeries(e.target.checked)}
-                  />{" "}
-                  Apply to this and future occurrences of this series
-                </span>
-              </label>
+              <p>This assigns the recurring meeting and all future sessions to this workspace.</p>
             )}
             <ErrorNotice text={formError} />
             <div className="modal-actions">
