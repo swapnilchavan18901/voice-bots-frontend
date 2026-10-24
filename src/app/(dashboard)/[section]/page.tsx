@@ -4,6 +4,7 @@ import { Agents, Templates } from "@/components/agents";
 import { Team, Keys, Integration } from "@/components/settings";
 import { Patients } from "@/components/patients";
 import { Playground } from "@/components/playground";
+import { Outreach } from "@/components/outreach";
 import { ClinicPhone } from "@/components/clinic-phone";
 export default async function Page({
   params,
@@ -13,6 +14,7 @@ export default async function Page({
   const { section } = await params;
   const pages: Record<string, React.ReactNode> = {
     agents: <Agents />,
+    outreach: <Outreach />,
     clinic: <Agents feature="clinic" />,
     patients: <Patients />,
     "clinic-phone": <ClinicPhone />,

@@ -197,3 +197,32 @@ src/
 ```
 
 The frontend environment contains the backend origin and optional deployment-specific ICE servers. Fixed behavior is configured in the constants file. Shared pure helpers live under `utils`; components retain browser resource lifecycles and rendering.
+
+## Clinic phone calls
+
+Open **Clinic Bot → Phone calls** to select a clinic assistant, view incoming and
+outgoing calls, and start an outbound call. The existing browser test ground stays
+available from this screen. Owners/admins can dial and review uncertain call outcomes;
+members can view history. Platform operators with workspace management access can
+assign the Exotel number, enable/disable its route, and copy its private connection URL.
+The backend `/phone/capabilities` endpoint supplies these permissions and service readiness.
+
+Outbound requests retain their identifier in session storage until acknowledged,
+so retrying after a lost response or page reload reuses the same attempt. Phone
+numbers require a country code. Call history polls while the page is visible and
+shows provider status; a completed call does not itself prove an appointment was booked.
+
+
+## Sales Outreach
+
+Open **Sales Outreach → Agents & campaigns** (`/outreach`) to create sales
+agents, prepare campaigns from manual contacts or CSV, and view call results.
+Owners and admins can save agents, create drafts, start or stop campaigns, and
+resolve calls awaiting review. Members can view agents, campaigns, and calls.
+
+Campaign creation only saves a draft. Starting a campaign explicitly confirms
+real phone calls through the backend's Exotel integration. Sequential mode calls
+one contact at a time; parallel mode calls up to five. Campaigns and call results
+refresh every five seconds. Existing campaigns retain their original agent brief.
+The backend's Outreach migrations and Exotel configuration must be ready before
+starting calls. The frontend uses the existing `NEXT_PUBLIC_API_URL` and session.

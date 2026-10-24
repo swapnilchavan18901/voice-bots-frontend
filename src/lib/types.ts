@@ -205,8 +205,17 @@ export type ClinicPhoneCall = {
   bot_id: string;
   direction: "inbound" | "outbound";
   phone_number: string;
-  status: "dialing" | "unknown" | "queued" | "ringing" | "in-progress" |
-    "completed" | "failed" | "busy" | "no-answer" | "cancelled";
+  status:
+    | "dialing"
+    | "unknown"
+    | "queued"
+    | "ringing"
+    | "in-progress"
+    | "completed"
+    | "failed"
+    | "busy"
+    | "no-answer"
+    | "cancelled";
   provider_call_sid: string | null;
   error: string | null;
   created_at: string;

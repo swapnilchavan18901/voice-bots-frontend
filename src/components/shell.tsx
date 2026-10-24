@@ -16,6 +16,7 @@ import {
   Plus,
   Radio,
   Phone,
+  TrendingUp,
   Users,
   ArrowUpRight,
   CheckCircle2,
@@ -27,6 +28,12 @@ import { useWorkspace } from "./workspace";
 import { Logo, Modal, ErrorNotice, Spinner } from "./ui";
 import { createOrganization, logout as signOut, message } from "@/lib/api";
 const groups = [
+  {
+    label: "SALES OUTREACH",
+    links: [
+      { href: "/outreach", label: "Agents & campaigns", icon: TrendingUp },
+    ],
+  },
   {
     label: "CLINIC BOT",
     links: [
