@@ -1,7 +1,6 @@
 "use client";
 import {
   languages,
-  ICE_SERVERS,
   VOICE_CONNECT_TIMEOUT_MS,
 } from "@/constants/constants";
 import type { TranscriptMessage, VoiceSession } from "@/lib/types";
@@ -22,6 +21,7 @@ import { useWorkspace } from "./workspace";
 import {
   getClinicInfo,
   createVoiceSession,
+  getVoiceIceServers,
   endVoiceSession,
   message,
 } from "@/lib/api";
@@ -118,7 +118,7 @@ export function Playground({
         throw new Error(
           "Microphone access requires HTTPS or localhost and a supported browser.",
         );
-      const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+      const pc = new RTCPeerConnection();
       const call: VoiceSession = {
         pc,
         organizationId: w.org.id,
@@ -126,6 +126,13 @@ export function Playground({
         abort: new AbortController(),
       };
       live.current = call;
+      const config = await getVoiceIceServers(
+        call.organizationId,
+        call.botId,
+        call.abort.signal,
+      );
+      if (run !== attempt.current) return;
+      pc.setConfiguration({ iceServers: config.ice_servers });
       call.timer = setTimeout(() => {
         if (live.current === call) {
           cleanup();

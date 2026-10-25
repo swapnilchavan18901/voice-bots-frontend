@@ -177,6 +177,19 @@ export async function getClinicInfo(
     })
   ).data;
 }
+export async function getVoiceIceServers(
+  orgId: string,
+  botId: string,
+  signal?: AbortSignal,
+) {
+  return (
+    await apiClient.get<{ ice_servers: RTCIceServer[]; expires_at?: string }>(
+      `${botPath(orgId, botId)}/voice/ice-servers`,
+      { signal },
+    )
+  ).data;
+}
+
 export async function createVoiceSession(
   orgId: string,
   botId: string,

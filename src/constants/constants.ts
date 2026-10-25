@@ -1,11 +1,8 @@
 export const PRODUCT_NAME = "Sia";
-// Fixed frontend policy. Deployment origins and ICE credentials stay in env.
+// Fixed frontend policy. Deployment origins stay in env.
 export const API_ORIGIN = (
   process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"
 ).replace(/\/$/, "");
-export const ICE_SERVERS: RTCIceServer[] = JSON.parse(
-  process.env.NEXT_PUBLIC_ICE_SERVERS || "[]",
-);
 export const TOKEN_KEY = "sia_access_token";
 export const WORKSPACE_KEY = "sia-organization";
 export const THEME_KEY = "sia-theme";

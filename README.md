@@ -196,7 +196,7 @@ src/
 └── app/                     Routes, layouts and theme styles
 ```
 
-The frontend environment contains the backend origin and optional deployment-specific ICE servers. Fixed behavior is configured in the constants file. Shared pure helpers live under `utils`; components retain browser resource lifecycles and rendering.
+The frontend environment contains the backend origin. Browser voice fetches temporary ICE credentials from the authenticated backend before connecting; no TURN password or Metered management secret belongs in frontend environment variables. Fixed behavior is configured in the constants file. Shared pure helpers live under `utils`; components retain browser resource lifecycles and rendering.
 
 ## Clinic phone calls
 
@@ -226,3 +226,13 @@ one contact at a time; parallel mode calls up to five. Campaigns and call result
 refresh every five seconds. Existing campaigns retain their original agent brief.
 The backend's Outreach migrations and Exotel configuration must be ready before
 starting calls. The frontend uses the existing `NEXT_PUBLIC_API_URL` and session.
+
+
+### TURN deployment
+
+Set only `NEXT_PUBLIC_API_URL` for voice connectivity in Vercel. Remove the old
+`NEXT_PUBLIC_TURN_USERNAME`, `NEXT_PUBLIC_TURN_PASSWORD`, and `NEXT_PUBLIC_ICE_SERVERS`
+variables and rebuild the frontend. Render owns Metered configuration and credential
+rotation; follow the backend README's **Temporary TURN credentials** instructions.
+The browser requests fresh ICE configuration on every call, supports cancelling
+that request, and shows the backend's warm-up message if credentials are not ready.
