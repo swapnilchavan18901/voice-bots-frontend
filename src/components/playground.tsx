@@ -49,6 +49,7 @@ export function Playground({
     "idle" | "connecting" | "connected" | "ended"
   >("idle");
   const [error, setError] = useState("");
+  const [connectionDetail, setConnectionDetail] = useState("");
   const [muted, setMuted] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
@@ -108,6 +109,7 @@ export function Playground({
     const run = attempt.current;
     setError("");
     setStatus("connecting");
+    setConnectionDetail("Preparing your voice connection…");
     setSeconds(0);
     setMuted(false);
     setAutoplayBlocked(false);
@@ -126,13 +128,6 @@ export function Playground({
         abort: new AbortController(),
       };
       live.current = call;
-      const config = await getVoiceIceServers(
-        call.organizationId,
-        call.botId,
-        call.abort.signal,
-      );
-      if (run !== attempt.current) return;
-      pc.setConfiguration({ iceServers: config.ice_servers });
       const armConnectionTimeout = (detail: string) => {
         clearTimeout(call.timer);
         call.timer = setTimeout(() => {
@@ -143,6 +138,19 @@ export function Playground({
           }
         }, VOICE_CONNECT_TIMEOUT_MS);
       };
+      armConnectionTimeout(
+        "Loading voice configuration timed out. Please try again.",
+      );
+      const config = await getVoiceIceServers(
+        call.organizationId,
+        call.botId,
+        call.abort.signal,
+      );
+      if (run !== attempt.current) return;
+      pc.setConfiguration({ iceServers: config.ice_servers });
+      setConnectionDetail(
+        "Waiting for microphone access. Check your browser’s microphone permission prompt.",
+      );
       armConnectionTimeout(
         "Microphone access timed out. Allow microphone access and try again.",
       );
@@ -218,6 +226,7 @@ export function Playground({
             );
         }
       };
+      setConnectionDetail("Finding a network route for your voice connection…");
       armConnectionTimeout(
         "ICE gathering timed out. Check your network and TURN configuration, then try again.",
       );
@@ -240,6 +249,7 @@ export function Playground({
         if (call.abort.signal.aborted) cancel();
       });
       if (run !== attempt.current) return;
+      setConnectionDetail("Starting your agent. Waiting for the voice server…");
       armConnectionTimeout(
         "Backend voice negotiation timed out. Check the backend logs and TURN configuration, then try again.",
       );
@@ -261,6 +271,7 @@ export function Playground({
         ).catch(() => {});
         return;
       }
+      setConnectionDetail("Connecting audio to your agent…");
       armConnectionTimeout(
         "The voice connection timed out. Check your network and TURN configuration, then try again.",
       );
@@ -457,7 +468,7 @@ export function Playground({
                   ? "Speak naturally. Your receptionist can help with appointments and clinic questions."
                   : "Go ahead, speak naturally. Your agent is listening."
                 : status === "connecting"
-                  ? "Allow microphone access when your browser asks."
+                  ? connectionDetail
                   : "Put on your headphones, find a quiet spot, and start talking."}
             </p>
             {isClinic && (
