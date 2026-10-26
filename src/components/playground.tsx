@@ -4,6 +4,7 @@ import {
   VOICE_CONNECT_TIMEOUT_MS,
 } from "@/constants/constants";
 import type { TranscriptMessage, VoiceSession } from "@/lib/types";
+import { waitForIceCandidates } from "@/lib/voice";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -231,23 +232,7 @@ export function Playground({
         "ICE gathering timed out. Check your network and TURN configuration, then try again.",
       );
       await pc.setLocalDescription(await pc.createOffer());
-      await new Promise<void>((resolve, reject) => {
-        if (pc.iceGatheringState === "complete") return resolve();
-        const done = () => {
-          if (pc.iceGatheringState === "complete") {
-            pc.removeEventListener("icegatheringstatechange", done);
-            call.abort.signal.removeEventListener("abort", cancel);
-            resolve();
-          }
-        };
-        const cancel = () => {
-          pc.removeEventListener("icegatheringstatechange", done);
-          reject(new DOMException("Cancelled", "AbortError"));
-        };
-        call.abort.signal.addEventListener("abort", cancel, { once: true });
-        pc.addEventListener("icegatheringstatechange", done);
-        if (call.abort.signal.aborted) cancel();
-      });
+      await waitForIceCandidates(pc, call.abort.signal);
       if (run !== attempt.current) return;
       setConnectionDetail("Starting your agent. Waiting for the voice server…");
       armConnectionTimeout(
