@@ -2452,14 +2452,6 @@ tr:last-child td {
   color: var(--secondary);
 }
 
-.clinic-facts p {
-  margin: 10px 0;
-  line-height: 1.55;
-}
-.clinic-facts p b {
-  color: var(--ink);
-  font-weight: 600;
-}
 .clinic-transcript {
   width: min(100%, 520px);
   max-height: 190px;
@@ -2500,36 +2492,6 @@ tr:last-child td {
 .transcript-line.user p {
   margin-left: auto;
   background: var(--surface-muted);
-}
-
-.clinic-context-fields {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  margin: 20px 0;
-  padding: 16px;
-}
-.clinic-context-fields legend {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 0 5px;
-}
-.clinic-context-fields > p {
-  margin-bottom: 16px;
-}
-.clinic-working-days {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-.clinic-working-days label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-}
-.clinic-working-days input {
-  width: auto;
 }
 
 /* Meeting workspace and operator inbox */

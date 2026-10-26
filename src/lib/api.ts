@@ -6,7 +6,6 @@ import type {
   Bot,
   CalendarEvent,
   CalendarStatus,
-  ClinicInfo,
   ClinicPatient,
   ClinicRegister,
   ClinicPhoneCapabilities,
@@ -164,17 +163,6 @@ export async function assignCalendarEvent(
       `/operator/meeting-events/${encodeURIComponent(eventId)}/assign`,
       data,
     )
-  ).data;
-}
-export async function getClinicInfo(
-  orgId: string,
-  botId: string,
-  signal?: AbortSignal,
-) {
-  return (
-    await apiClient.get<ClinicInfo>(`${botPath(orgId, botId)}/clinic/info`, {
-      signal,
-    })
   ).data;
 }
 export async function getVoiceIceServers(

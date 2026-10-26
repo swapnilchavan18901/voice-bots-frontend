@@ -75,21 +75,6 @@ export type MeetingConnection = {
   auto_join?: boolean;
 };
 export type MeetingMemory = { context: string };
-export type ClinicInfo = {
-  today: string;
-  timezone?: string;
-  clinic_name?: string;
-  background: string;
-  booking_ready: boolean;
-  hours?: string;
-  lunch?: string;
-  address?: string;
-  phone?: string;
-  fees?: string;
-  parking?: string;
-  booking: string;
-  doctors: { id: number; name: string; specialty: string }[];
-};
 export type VoiceAnswer = { sdp: string; type: RTCSdpType; pc_id: string };
 
 export type AuthResponse = {
@@ -143,23 +128,6 @@ export type VoiceSession = {
   botId: string;
   abort: AbortController;
   timer?: ReturnType<typeof setTimeout>;
-};
-
-export type ClinicDraft = {
-  name: string;
-  address: string;
-  phone: string;
-  fees: string;
-  parking: string;
-  booking: string;
-  timezone: string;
-  working_days: number[];
-  open_time: string;
-  close_time: string;
-  lunch_start: string;
-  lunch_end: string;
-  slot_minutes: string;
-  doctors: string;
 };
 
 export type WorkspaceContext = {

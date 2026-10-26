@@ -16,9 +16,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { readClinicContext, saveClinicContext } from "@/utils/clinic-context";
 import { useWorkspace } from "./workspace";
-import { ClinicContextFields } from "./clinic-context";
 import {
   CopyButton,
   Empty,
@@ -61,14 +59,7 @@ function BotEditor({
     feature === "clinic" ||
     (template || w.templates.find((t) => t.id === selected))?.service_type ===
       "clinic";
-  const initialClinic = isClinic
-    ? readClinicContext(bot?.company_context || "")
-    : {
-        background: bot?.company_context || "",
-        clinic: readClinicContext("").clinic,
-      };
-  const [context, setContext] = useState(initialClinic.background);
-  const [clinicDraft, setClinicDraft] = useState(initialClinic.clinic);
+  const [context, setContext] = useState(bot?.company_context || "");
   const [language, setLanguage] = useState(bot?.language || "en-IN");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -80,9 +71,7 @@ function BotEditor({
       if (!w.org) throw new Error("Select a workspace first.");
       const data = {
         name: name.trim(),
-        company_context: isClinic
-          ? saveClinicContext(context, clinicDraft)
-          : context,
+        company_context: context,
         language,
       };
       if (bot) await updateBot(w.org.id, bot.id, data);
@@ -147,24 +136,25 @@ function BotEditor({
         <label className="field">
           Company context{" "}
           <span className="field-hint">
-            Tell your agent about your business, services, hours, and FAQs.
+            {isClinic
+              ? "Enter all clinic details here: name, address, phone, doctors, fees, hours, appointment slots, and policies. This context is the sole source of clinic information."
+              : "Tell your agent about your business, services, hours, and FAQs."}
           </span>
           <textarea
-            rows={8}
+            rows={isClinic ? 16 : 8}
             maxLength={20000}
             value={context}
             onChange={(e) => setContext(e.target.value)}
             placeholder={
-              "About us\nWe are Acme Clinic, based in Pune.\n\nOur services\nGeneral consultations and dental checkups.\n\nHours\nMonday–Saturday, 9 AM–6 PM."
+              isClinic
+                ? "# Acme Clinic\n\n## Clinic details\n- Address: Pune\n- Phone: +91 9876543210\n- Timezone: Asia/Kolkata\n- Hours: Monday–Saturday, 9 AM–6 PM\n- Appointment length: 30 minutes\n- Fees: ₹500 per consultation\n- Parking: Available outside\n- Booking policy: Cancel at least 24 hours in advance\n\n## Doctors\n| Doctor | Specialty |\n| --- | --- |\n| Dr. Mehta | General medicine |"
+                : "About us\nWe are Acme, based in Pune.\n\nOur services\nTell us about your services, hours, and FAQs."
             }
           />
           <span className="character-count">
             {context.length.toLocaleString()} / 20,000
           </span>
         </label>
-        {isClinic && (
-          <ClinicContextFields value={clinicDraft} onChange={setClinicDraft} />
-        )}
         <div className="inline-note">
           <LockKeyhole size={15} />
           <span>
@@ -293,8 +283,7 @@ export function Agents({
                     {template?.name || "Unavailable template"}
                   </span>
                   <p className="agent-context">
-                    {readClinicContext(bot.company_context).background ||
-                      readClinicContext(bot.company_context).clinic.name ||
+                    {bot.company_context ||
                       "Add your company details to make this agent feel like part of your team."}
                   </p>
                   <div className="agent-id">

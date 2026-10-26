@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { useWorkspace } from "./workspace";
 import {
-  getClinicInfo,
   createVoiceSession,
   getVoiceIceServers,
   endVoiceSession,
@@ -34,7 +33,6 @@ import {
   TemplateIcon,
   Wave,
 } from "./ui";
-import { ClinicInfo } from "@/lib/types";
 export function Playground({
   feature = "conversation",
 }: {
@@ -54,7 +52,6 @@ export function Playground({
   const [muted, setMuted] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
-  const [clinicInfo, setClinicInfo] = useState<ClinicInfo | null>(null);
   const [transcript, setTranscript] = useState<TranscriptMessage[]>([]);
   const [speaking, setSpeaking] = useState<"none" | "user" | "bot">("none");
   const live = useRef<VoiceSession | null>(null);
@@ -64,18 +61,8 @@ export function Playground({
   const template = w.templates.find((t) => t.id === bot?.template_id);
   const isClinic = template?.service_type === "clinic";
   useEffect(() => {
-    setClinicInfo(null);
     setTranscript([]);
-    if (!isClinic || !w.org?.id || !bot?.id) return;
-    const controller = new AbortController();
-    getClinicInfo(w.org.id, bot.id, controller.signal)
-      .then(setClinicInfo)
-      .catch(() => {
-        if (!controller.signal.aborted)
-          setError("Could not load clinic information.");
-      });
-    return () => controller.abort();
-  }, [bot?.id, isClinic, w.org?.id]);
+  }, [bot?.id]);
   const cleanup = useCallback(() => {
     attempt.current++;
     const call = live.current;
@@ -348,58 +335,12 @@ export function Playground({
               <span>Voice provider</span>
               <b>Sarvam AI</b>
             </div>
-            {isClinic && (
-              <div className="context-preview clinic-facts">
-                <span className="eyebrow">
-                  {clinicInfo?.clinic_name || "CLINIC DETAILS"}
-                </span>
-                {clinicInfo ? (
-                  <>
-                    {[
-                      ["Hours", clinicInfo.hours],
-                      ["Break", clinicInfo.lunch],
-                      ["Address", clinicInfo.address],
-                      ["Front desk", clinicInfo.phone],
-                      ["Fees", clinicInfo.fees],
-                      ["Parking", clinicInfo.parking],
-                    ]
-                      .filter(([, value]) => value)
-                      .map(([label, value]) => (
-                        <p key={label}>
-                          <b>{label}</b>
-                          <br />
-                          {value}
-                        </p>
-                      ))}
-                    {clinicInfo.doctors.length > 0 && (
-                      <p>
-                        <b>Doctors</b>
-                        <br />
-                        {clinicInfo.doctors
-                          .map((d) => `${d.name} · ${d.specialty}`)
-                          .join("; ")}
-                      </p>
-                    )}
-                    {!clinicInfo.booking_ready && (
-                      <p>
-                        Add a booking schedule in My agents to enable
-                        appointments.
-                      </p>
-                    )}
-                    {!clinicInfo.background && !clinicInfo.clinic_name && (
-                      <p>Add clinic details in your agent context.</p>
-                    )}
-                  </>
-                ) : (
-                  <p>Loading clinic details…</p>
-                )}
-              </div>
-            )}
             <div className="context-preview">
-              <span className="eyebrow">COMPANY CONTEXT</span>
+              <span className="eyebrow">
+                COMPANY CONTEXT
+              </span>
               <p>
-                {(isClinic ? clinicInfo?.background : bot?.company_context) ||
-                  "No company context added yet."}
+                {bot?.company_context || "No context added yet."}
               </p>
             </div>
             <div className="inline-note">
