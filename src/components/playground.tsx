@@ -133,15 +133,19 @@ export function Playground({
       );
       if (run !== attempt.current) return;
       pc.setConfiguration({ iceServers: config.ice_servers });
-      call.timer = setTimeout(() => {
-        if (live.current === call) {
-          cleanup();
-          setError(
-            "Connection timed out. Check your backend and TURN configuration, then try again.",
-          );
-          setStatus("ended");
-        }
-      }, VOICE_CONNECT_TIMEOUT_MS);
+      const armConnectionTimeout = (detail: string) => {
+        clearTimeout(call.timer);
+        call.timer = setTimeout(() => {
+          if (live.current === call) {
+            cleanup();
+            setError(detail);
+            setStatus("ended");
+          }
+        }, VOICE_CONNECT_TIMEOUT_MS);
+      };
+      armConnectionTimeout(
+        "Microphone access timed out. Allow microphone access and try again.",
+      );
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true },
       });
@@ -214,6 +218,9 @@ export function Playground({
             );
         }
       };
+      armConnectionTimeout(
+        "ICE gathering timed out. Check your network and TURN configuration, then try again.",
+      );
       await pc.setLocalDescription(await pc.createOffer());
       await new Promise<void>((resolve, reject) => {
         if (pc.iceGatheringState === "complete") return resolve();
@@ -233,6 +240,9 @@ export function Playground({
         if (call.abort.signal.aborted) cancel();
       });
       if (run !== attempt.current) return;
+      armConnectionTimeout(
+        "Backend voice negotiation timed out. Check the backend logs and TURN configuration, then try again.",
+      );
       const answer = await createVoiceSession(
         call.organizationId,
         call.botId,
@@ -251,6 +261,9 @@ export function Playground({
         ).catch(() => {});
         return;
       }
+      armConnectionTimeout(
+        "The voice connection timed out. Check your network and TURN configuration, then try again.",
+      );
       await pc.setRemoteDescription({ sdp: answer.sdp, type: answer.type });
     } catch (e) {
       if (run !== attempt.current) return;
