@@ -1494,7 +1494,7 @@ tr:last-child td {
   min-width: 260px;
   margin: 0;
 }
-.bot-id-display {
+.agent-id-display {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1502,12 +1502,12 @@ tr:last-child td {
   font-size: 10px;
   color: var(--secondary);
 }
-.bot-id-display > span {
+.agent-id-display > span {
   font-size: 8px;
   letter-spacing: 1px;
   width: 100%;
 }
-.bot-id-display code {
+.agent-id-display code {
   font-size: 11px;
 }
 .guide-step {
@@ -2310,7 +2310,7 @@ tr:last-child td {
   .integration-selector > .field {
     width: 100%;
   }
-  .bot-id-display code {
+  .agent-id-display code {
     font-size: 10px;
   }
   .step-heading {

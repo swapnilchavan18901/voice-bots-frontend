@@ -2,7 +2,7 @@ import {
   API_ORIGIN,
   REQUEST_TIMEOUT_MS,
   TOKEN_KEY,
-  LEGACY_TOKEN_KEY,
+  LEGACY_TOKEN_KEYS,
 } from "@/constants/constants";
 import axios from "axios";
 
@@ -19,8 +19,9 @@ class ApiError extends Error {
 export function getAccessToken() {
   if (typeof document === "undefined") return null;
   const cookies = document.cookie.split("; ");
-  const entry = cookies.find((cookie) => cookie.startsWith(`${TOKEN_KEY}=`))
-    || cookies.find((cookie) => cookie.startsWith(`${LEGACY_TOKEN_KEY}=`));
+  const entry = [TOKEN_KEY, ...LEGACY_TOKEN_KEYS]
+    .map((key) => cookies.find((cookie) => cookie.startsWith(`${key}=`)))
+    .find(Boolean);
   if (!entry) return null;
   try {
     return decodeURIComponent(entry.slice(entry.indexOf("=") + 1));
@@ -44,7 +45,9 @@ export function setAccessToken(token: string | null) {
       // Without a usable expiry, keep it as a browser-session cookie.
     }
   }
-  document.cookie = `${LEGACY_TOKEN_KEY}=; Path=/; SameSite=Lax; Max-Age=0${secure}`;
+  for (const key of LEGACY_TOKEN_KEYS) {
+    document.cookie = `${key}=; Path=/; SameSite=Lax; Max-Age=0${secure}`;
+  }
   document.cookie = `${TOKEN_KEY}=${token ? encodeURIComponent(token) : ""}; Path=/; SameSite=Lax${expiry}${secure}`;
 }
 

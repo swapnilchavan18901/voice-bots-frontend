@@ -67,12 +67,12 @@ export function ClinicPhone() {
   const w = useWorkspace();
   const query = useSearchParams();
   const bots = w.features.clinic.bots;
-  const [selection, setSelection] = useState(query.get("bot") || "");
+  const [selection, setSelection] = useState((query.get("agent") || query.get("bot")) || "");
   const selected = bots.find((bot) => bot.id === selection) || bots[0];
   return (
     <>
       <PageTitle
-        eyebrow="CLINIC BOT"
+        eyebrow="HEALTHCARE"
         title="Phone calls"
         description="Let your clinic assistant answer incoming calls and help patients over the phone."
       />
@@ -105,7 +105,7 @@ export function ClinicPhone() {
             </label>
             <Link
               className="button secondary small"
-              href={`/clinic-test-ground?bot=${selected.id}`}
+              href={`/clinic-preview?agent=${selected.id}`}
             >
               Try browser voice <ArrowUpRight size={14} />
             </Link>
@@ -156,7 +156,7 @@ function PhoneWorkspace({
   const [callResult, setCallResult] = useState<ClinicPhoneCall | null>(null);
   const mounted = useRef(false);
   const dialing = useRef(false);
-  const storageKey = `sia-clinic-call:${w.user?.id}:${orgId}:${botId}`;
+  const storageKey = `audiva-clinic-call:${w.user?.id}:${orgId}:${botId}`;
   const clearPending = useCallback(() => {
     sessionStorage.removeItem(storageKey);
     setPending(null);
@@ -170,7 +170,12 @@ function PhoneWorkspace({
   }, []);
   useEffect(() => {
     try {
-      const saved = sessionStorage.getItem(storageKey);
+      const legacyKey = storageKey.replace("audiva-clinic-call:", "sia-clinic-call:");
+      const saved = sessionStorage.getItem(storageKey) || sessionStorage.getItem(legacyKey);
+      if (saved) {
+        sessionStorage.setItem(storageKey, saved);
+        sessionStorage.removeItem(legacyKey);
+      }
       if (saved) {
         const data: PendingCall = JSON.parse(saved);
         if (
@@ -370,7 +375,7 @@ function PhoneWorkspace({
                   <span
                     className={`phone-status ${route.enabled ? "success" : "neutral"}`}
                   >
-                    {route.enabled ? "Enabled in Sia" : "Disabled in Sia"}
+                    {route.enabled ? "Enabled in Audiva" : "Disabled in Audiva"}
                   </span>
                   <p className="phone-description">
                     {route.enabled
@@ -766,7 +771,7 @@ function RouteEditor({
             onChange={(event) => setEnabled(event.target.checked)}
             disabled={busy}
           />
-          Enable incoming calls in Sia
+          Enable incoming calls in Audiva
         </label>
         <p className="phone-warning">
           Saving replaces the connection URL. Update the Voicebot applet in

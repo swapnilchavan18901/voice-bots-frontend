@@ -29,37 +29,37 @@ import { Logo, Modal, ErrorNotice, Spinner } from "./ui";
 import { createOrganization, logout as signOut, message } from "@/lib/api";
 const groups = [
   {
-    label: "SALES OUTREACH",
+    label: "Sales outreach",
     links: [
       { href: "/outreach", label: "Agents & campaigns", icon: TrendingUp },
     ],
   },
   {
-    label: "CLINIC BOT",
+    label: "Healthcare",
     links: [
-      { href: "/clinic", label: "Clinic setup", icon: AudioLines },
-      { href: "/patients", label: "Daily patients", icon: Users },
+      { href: "/clinic", label: "Assistants", icon: AudioLines },
+      { href: "/patients", label: "Patient register", icon: Users },
       { href: "/clinic-phone", label: "Phone calls", icon: Phone },
-      { href: "/clinic-test-ground", label: "Test ground", icon: Radio },
+      { href: "/clinic-preview", label: "Voice preview", icon: Radio },
     ],
   },
   {
-    label: "MEETINGS BOT",
+    label: "Meetings",
     links: [
       { href: "/meetings", label: "Meetings", icon: CalendarDays },
-      { href: "/meeting-test-ground", label: "Test ground", icon: Radio },
+      { href: "/meeting-preview", label: "Voice preview", icon: Radio },
       { href: "/calendar-inbox", label: "Calendar inbox", icon: Inbox },
     ],
   },
   {
-    label: "OTHER BOTS",
+    label: "Voice agents",
     links: [
-      { href: "/agents", label: "Other agents", icon: AudioLines },
-      { href: "/playground", label: "Test ground", icon: Radio },
+      { href: "/agents", label: "Agents", icon: AudioLines },
+      { href: "/voice-preview", label: "Voice preview", icon: Radio },
     ],
   },
   {
-    label: "WORKSPACE SETTINGS",
+    label: "Workspace settings",
     links: [
       { href: "/templates", label: "Template library", icon: Boxes },
       { href: "/api-keys", label: "API keys", icon: KeyRound },
@@ -111,7 +111,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       )}
       <aside className={`sidebar ${mobile ? "open" : ""}`}>
         <div className="sidebar-brand">
-          <Link href="/clinic" aria-label="Sia home">
+          <Link href="/clinic" aria-label="Audiva home">
             <Logo />
           </Link>
           <button
@@ -162,7 +162,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 {label}
               </Link>
             ));
-            return group.label === "WORKSPACE SETTINGS" ? (
+            return group.label === "Workspace settings" ? (
               <details
                 className="nav-settings"
                 key={group.label}
@@ -187,11 +187,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <AudioLines size={19} />
             </div>
             <h4>
-              Your next conversation
-              <br />
-              starts here.
+              Connect your applications
             </h4>
-            <p>Connect an agent to your website in a few simple steps.</p>
+            <p>Connect Audiva to your website and business workflows.</p>
             <Link href="/integration">
               Integration guide <ArrowUpRight size={14} />
             </Link>
@@ -228,14 +226,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <strong>
               {groups
                 .find((g) => g.links.some((l) => l.href === path))
-                ?.label.toLowerCase()}{" "}
+                ?.label}{" "}
               / {links.find((l) => l.href === path)?.label || "Dashboard"}
             </strong>
           </div>
           <div className="top-actions">
             <ThemeToggle />
             <span className="platform-label">
-              <i /> Voice agent studio
+              <i /> Voice operations
             </span>
             <Link
               className="icon-button"
@@ -270,10 +268,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
           )}
         </main>
         <footer className="app-footer">
-          <span>Made for meaningful conversations.</span>
+          <span>Audiva</span>
           <span>
-            Sia studio <span className="footer-dot">·</span> Powered by Sarvam
-            AI
+            Voice agents, meetings, and outreach
           </span>
         </footer>
       </div>

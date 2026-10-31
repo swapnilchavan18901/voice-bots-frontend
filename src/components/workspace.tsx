@@ -1,7 +1,7 @@
 "use client";
 import {
   WORKSPACE_KEY,
-  LEGACY_WORKSPACE_KEY,
+  LEGACY_WORKSPACE_KEYS,
   TOAST_DURATION_MS,
   DEFAULT_MEETING_VOICE_NAME,
 } from "@/constants/constants";
@@ -72,7 +72,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         listOrganizations(),
         getMeetingCapabilities(),
       ]);
-      const preferred = selected.current || localStorage.getItem(WORKSPACE_KEY) || localStorage.getItem(LEGACY_WORKSPACE_KEY);
+      const preferred = selected.current || localStorage.getItem(WORKSPACE_KEY) || LEGACY_WORKSPACE_KEYS.map((key) => localStorage.getItem(key)).find(Boolean);
       const id =
         organizations.find((o) => o.id === preferred)?.id ||
         organizations[0]?.id ||

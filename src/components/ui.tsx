@@ -17,7 +17,7 @@ export function Logo() {
       <span className="brand-icon">
         <AudioLines size={23} strokeWidth={2.4} />
       </span>
-      {PRODUCT_NAME}<span className="brand-dot">.</span>
+      {PRODUCT_NAME}
     </span>
   );
 }

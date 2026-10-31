@@ -26,11 +26,11 @@ function subscribe(update: () => void) {
           : "light";
     update();
   }
-  window.addEventListener("sia-theme-change", update);
+  window.addEventListener("audiva-theme-change", update);
   window.addEventListener("storage", syncStorage);
   media.addEventListener("change", syncSystem);
   return () => {
-    window.removeEventListener("sia-theme-change", update);
+    window.removeEventListener("audiva-theme-change", update);
     window.removeEventListener("storage", syncStorage);
     media.removeEventListener("change", syncSystem);
   };
@@ -54,7 +54,7 @@ export function ThemeToggle() {
         try {
           localStorage.setItem(key, next);
         } catch {}
-        window.dispatchEvent(new Event("sia-theme-change"));
+        window.dispatchEvent(new Event("audiva-theme-change"));
       }}
     >
       {dark ? <Sun size={18} /> : <Moon size={18} />}

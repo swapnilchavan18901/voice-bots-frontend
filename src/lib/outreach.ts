@@ -140,7 +140,7 @@ export async function downloadContactsTemplate(org: string) {
   const url = URL.createObjectURL(response.data);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "sia-outreach-contacts.csv";
+  link.download = "audiva-outreach-contacts.csv";
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

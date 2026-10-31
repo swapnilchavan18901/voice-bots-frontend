@@ -390,7 +390,7 @@ function AgentEditor({
               maxLength={100}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Sia product advisor"
+              placeholder="e.g. Audiva product advisor"
             />
           </label>
           <label className="field">

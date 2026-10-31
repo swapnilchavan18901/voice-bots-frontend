@@ -42,7 +42,7 @@ export function Playground({
   const query = useSearchParams();
   const bots = w.features[feature].bots;
   const [selected, setSelected] = useState(
-    bots.find((b) => b.id === query.get("bot"))?.id || bots[0]?.id || "",
+    bots.find((b) => b.id === (query.get("agent") || query.get("bot")))?.id || bots[0]?.id || "",
   );
   const [status, setStatus] = useState<
     "idle" | "connecting" | "connected" | "ended"
@@ -269,16 +269,16 @@ export function Playground({
   return (
     <>
       <PageTitle
-        eyebrow="HEAR THE DIFFERENCE"
+        eyebrow="VOICE PREVIEW"
         title={
-          feature === "clinic" ? "Clinic test ground" : "Agent test ground"
+          feature === "clinic" ? "Clinic voice preview" : "Agent voice preview"
         }
-        description="A real conversation is the best way to get to know your agent."
+        description="Verify your agent’s responses, language, and business context before connecting it to customers."
       />
       {!bots.length ? (
         <Empty
           icon={<Headphones size={26} />}
-          title="First, give your agent a name"
+          title="Create an agent to begin"
           description="Create an agent before starting a voice conversation."
           action={
             <Link
@@ -332,8 +332,8 @@ export function Playground({
               </b>
             </div>
             <div className="config-detail">
-              <span>Voice provider</span>
-              <b>Sarvam AI</b>
+              <span>Session type</span>
+              <b>Live voice preview</b>
             </div>
             <div className="context-preview">
               <span className="eyebrow">
@@ -346,7 +346,7 @@ export function Playground({
             <div className="inline-note">
               <ShieldCheck size={17} />
               <span>
-                This playground uses your signed-in account. No API key needed.
+                Preview sessions use your workspace access. An integration key is not required.
               </span>
             </div>
           </aside>
@@ -479,10 +479,9 @@ export function Playground({
         <p>
           Your context is used for every new conversation. Update it in{" "}
           <Link href={feature === "clinic" ? "/clinic" : "/agents"}>
-            My agents
+            Agent settings
           </Link>{" "}
-          to fine-tune the experience. VoiceSession voice requires the backend’s
-          Sarvam API key.
+          before starting a new preview session.
         </p>
       </div>
     </>

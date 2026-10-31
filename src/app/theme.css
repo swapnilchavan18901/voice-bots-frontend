@@ -1,25 +1,25 @@
-/* Srvix palette: warm amber by day, charcoal and lime by night. */
+/* Audiva: slate surfaces with a consistent indigo accent. */
 :root {
   color-scheme: light;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Space Grotesk", "Inter", ui-sans-serif, sans-serif;
-  --bg: #fcfaf7;
+  --bg: #f7f8fc;
   --paper: #ffffff;
-  --surface-subtle: #faf9f7;
-  --surface-muted: #f0eee9;
-  --ink: #1c1a17;
-  --secondary: #57524a;
-  --muted: #79746c;
-  --faint: #a39d93;
-  --line: #1c1a1714;
-  --line-strong: #1c1a1724;
-  --accent: #ffd184;
-  --accent-light: #ffdd9e;
-  --accent-hover: #f0b155;
-  --accent-text: #80500c;
-  --accent-soft: #ffd18426;
-  --on-accent: #1c1a17;
-  --hover: #1c1a170d;
+  --surface-subtle: #f8f9fc;
+  --surface-muted: #eef1f7;
+  --ink: #172033;
+  --secondary: #526078;
+  --muted: #68758c;
+  --faint: #8b95a7;
+  --line: #17203314;
+  --line-strong: #17203324;
+  --accent: #4f46e5;
+  --accent-light: #6366f1;
+  --accent-hover: #4338ca;
+  --accent-text: #4338ca;
+  --accent-soft: #4f46e526;
+  --on-accent: #ffffff;
+  --hover: #1720330d;
   --green: #15803d;
   --success-bg: #ecfdf3;
   --success-line: #bbf7d0;
@@ -29,28 +29,29 @@
   --warning: #b45309;
   --warning-bg: #fef3c7;
   --warning-line: #fde68a;
-  --shadow: 0 12px 40px #1c1a1708;
+  --shadow: 0 12px 40px #17203308;
   --orange: var(--accent-text);
   --orange-dark: var(--accent-hover);
   --peach: var(--accent-soft);
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #131517;
-  --paper: #1c1e21;
-  --surface-subtle: #232629;
-  --surface-muted: #2b2e32;
-  --ink: #f5f5f4;
-  --secondary: #d3d1cc;
-  --muted: #9a978f;
-  --faint: #6b6862;
+  --on-accent: #101522;
+  --bg: #101522;
+  --paper: #171e2e;
+  --surface-subtle: #1c2538;
+  --surface-muted: #263047;
+  --ink: #edf1fa;
+  --secondary: #c4cee0;
+  --muted: #94a2ba;
+  --faint: #77849d;
   --line: #ffffff14;
   --line-strong: #ffffff24;
-  --accent: #d1fe17;
-  --accent-light: #e2fd6b;
-  --accent-hover: #a7cc12;
-  --accent-text: #d1fe17;
-  --accent-soft: #d1fe1714;
+  --accent: #a5b4fc;
+  --accent-light: #c7d2fe;
+  --accent-hover: #818cf8;
+  --accent-text: #a5b4fc;
+  --accent-soft: #a5b4fc14;
   --hover: #ffffff0f;
   --green: #4ade80;
   --success-bg: #15803d2e;
@@ -287,7 +288,7 @@ input[type="checkbox"],
 .context-preview,
 .clinic-transcript,
 .transcript-line p,
-.bot-id-display {
+.agent-id-display {
   background: var(--surface-subtle);
   border-color: var(--line);
   color: var(--secondary);
@@ -467,3 +468,10 @@ input[type="checkbox"],
 .profile small {
   font-size: 11px;
 }
+
+/* A restrained wordmark and clear focus states across both themes. */
+.brand { font-size: 26px; font-weight: 700; letter-spacing: -1px; }
+.brand-icon { border-radius: 9px; box-shadow: none; }
+.button.primary, .button.dark { background: var(--accent); box-shadow: none; }
+a:focus-visible, button:focus-visible { outline-color: var(--accent-text); }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent-text) !important; box-shadow: 0 0 0 3px var(--accent-soft); }

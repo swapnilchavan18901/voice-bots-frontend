@@ -87,8 +87,8 @@ function BotEditor({
   }
   return (
     <Modal
-      title={bot ? "Make it your own" : "Create your voice agent"}
-      subtitle="Start with our expertise. Add what makes your business different."
+      title={bot ? "Edit agent" : "Create agent"}
+      subtitle="Configure the agent’s language, business context, and behavior."
       onClose={() => !busy && onClose()}
     >
       <form onSubmit={save}>
@@ -219,12 +219,12 @@ export function Agents({
   return (
     <>
       <PageTitle
-        eyebrow="YOUR VOICE, AT WORK"
-        title={feature === "clinic" ? "Clinic bot" : "Other agents"}
+        eyebrow="AGENT MANAGEMENT"
+        title={feature === "clinic" ? "Clinic assistants" : "Voice agents"}
         description={
           feature === "clinic"
             ? "Set up your clinic assistant, track patients, and test a call."
-            : "Set up and test your other voice assistants."
+            : "Configure, manage, and preview your voice agents."
         }
         action={
           w.canManage && (
@@ -233,7 +233,7 @@ export function Agents({
               onClick={() => setCreating(true)}
             >
               <Plus size={17} />{" "}
-              {feature === "clinic" ? "Set up clinic bot" : "Create agent"}
+              {feature === "clinic" ? "Create assistant" : "Create agent"}
             </button>
           )
         }
@@ -293,13 +293,13 @@ export function Agents({
                     <CopyButton value={bot.id} label="Copy ID" />
                   </div>
                   {feature === "clinic" && (
-                    <Link href={`/clinic-phone?bot=${bot.id}`} className="text-link clinic-phone-card-link">
+                    <Link href={`/clinic-phone?agent=${bot.id}`} className="text-link clinic-phone-card-link">
                       Phone settings & call history <ArrowRight size={14} />
                     </Link>
                   )}
                   <div className="card-bottom">
                     <Link
-                      href={`${feature === "clinic" ? "/clinic-test-ground" : "/playground"}?bot=${bot.id}`}
+                      href={`${feature === "clinic" ? "/clinic-preview" : "/voice-preview"}?agent=${bot.id}`}
                       className="text-link"
                     >
                       <Mic size={15} /> Test agent <ArrowRight size={14} />
@@ -384,7 +384,7 @@ export function Agents({
           onClose={() => !busy && setDeleting(null)}
         >
           <p className="muted">
-            Website integrations using this bot ID will stop accepting new
+            Website integrations using this agent ID will stop accepting new
             calls.
           </p>
           <ErrorNotice text={error} />

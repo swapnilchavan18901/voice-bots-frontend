@@ -568,12 +568,12 @@ export function Integration() {
   const [selected, setSelected] = useState(w.bots[0]?.id || "");
   const platform = API_ORIGIN;
   const bot = w.bots.find((b) => b.id === selected);
-  const tokenCode = `// Run on YOUR server. Never expose this key to the browser.\nconst response = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_BOT_ID"}/session-token",\n  {\n    method: "POST",\n    headers: { "X-API-Key": process.env.SIA_API_KEY }\n  }\n);\nif (!response.ok) throw new Error("Token request failed");\nconst { token } = await response.json();\n// Return { token } from your own authenticated/rate-limited endpoint.`;
-  const browserCode = `// First get a short-lived token from YOUR server.\nconst configResponse = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_BOT_ID"}/webrtc/ice-servers",\n  { headers: { "Authorization": \`Bearer \${token}\` }, cache: "no-store" }\n);\nif (!configResponse.ok) throw new Error("Voice relay unavailable");\nconst { ice_servers } = await configResponse.json();\nconst pc = new RTCPeerConnection({ iceServers: ice_servers });\nconst stream = await navigator.mediaDevices.getUserMedia({ audio: true });\nstream.getTracks().forEach(track => pc.addTrack(track, stream));\npc.createDataChannel("pipecat");\nawait pc.setLocalDescription(await pc.createOffer());\nawait new Promise(resolve => {\n  if (pc.iceGatheringState === "complete") return resolve();\n  pc.addEventListener("icegatheringstatechange", function done() {\n    if (pc.iceGatheringState === "complete") {\n      pc.removeEventListener("icegatheringstatechange", done);\n      resolve();\n    }\n  });\n});\n// Register audio/data handlers and clean up tracks when the call ends.\nconst response = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_BOT_ID"}/webrtc/offer",\n  {\n    method: "POST",\n    headers: {\n      "Authorization": \`Bearer \${token}\`,\n      "Content-Type": "application/json"\n    },\n    body: JSON.stringify(pc.localDescription)\n  }\n);\nif (!response.ok) throw new Error("WebRTC negotiation failed");\nconst { sdp, type, pc_id } = await response.json();\nawait pc.setRemoteDescription({ sdp, type });`;
+  const tokenCode = `// Run on YOUR server. Never expose this key to the browser.\nconst response = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_AGENT_ID"}/session-token",\n  {\n    method: "POST",\n    headers: { "X-API-Key": process.env.AUDIVA_API_KEY }\n  }\n);\nif (!response.ok) throw new Error("Token request failed");\nconst { token } = await response.json();\n// Return { token } from your own authenticated/rate-limited endpoint.`;
+  const browserCode = `// First get a short-lived token from YOUR server.\nconst configResponse = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_AGENT_ID"}/webrtc/ice-servers",\n  { headers: { "Authorization": \`Bearer \${token}\` }, cache: "no-store" }\n);\nif (!configResponse.ok) throw new Error("Voice relay unavailable");\nconst { ice_servers } = await configResponse.json();\nconst pc = new RTCPeerConnection({ iceServers: ice_servers });\nconst stream = await navigator.mediaDevices.getUserMedia({ audio: true });\nstream.getTracks().forEach(track => pc.addTrack(track, stream));\npc.createDataChannel("pipecat");\nawait pc.setLocalDescription(await pc.createOffer());\nawait new Promise(resolve => {\n  if (pc.iceGatheringState === "complete") return resolve();\n  pc.addEventListener("icegatheringstatechange", function done() {\n    if (pc.iceGatheringState === "complete") {\n      pc.removeEventListener("icegatheringstatechange", done);\n      resolve();\n    }\n  });\n});\n// Register audio/data handlers and clean up tracks when the call ends.\nconst response = await fetch(\n  "${platform}/api/v1/public/bots/${selected || "YOUR_AGENT_ID"}/webrtc/offer",\n  {\n    method: "POST",\n    headers: {\n      "Authorization": \`Bearer \${token}\`,\n      "Content-Type": "application/json"\n    },\n    body: JSON.stringify(pc.localDescription)\n  }\n);\nif (!response.ok) throw new Error("WebRTC negotiation failed");\nconst { sdp, type, pc_id } = await response.json();\nawait pc.setRemoteDescription({ sdp, type });`;
   return (
     <>
       <PageTitle
-        eyebrow="FROM YOUR STUDIO TO YOUR SITE"
+        eyebrow="DEVELOPER TOOLS"
         title="Let’s get connected"
         description="Bring real-time conversations to the places your customers already are."
       />
@@ -612,8 +612,8 @@ export function Integration() {
           </select>
         </label>
         {bot && (
-          <div className="bot-id-display">
-            <span>BOT ID</span>
+          <div className="agent-id-display">
+            <span>AGENT ID</span>
             <code>{bot.id}</code>
             <CopyButton value={bot.id} />
           </div>
@@ -625,7 +625,7 @@ export function Integration() {
           <div>
             <h2>Create a server-side API key</h2>
             <p>
-              Store it in your server environment as <code>SIA_API_KEY</code>.
+              Store it in your server environment as <code>AUDIVA_API_KEY</code>.
             </p>
           </div>
           <Link className="button secondary small" href="/api-keys">

@@ -174,7 +174,7 @@ function JoinControls({ meeting }: { meeting: Meeting }) {
           onClick={() => void command(active ? "leave" : "join")}
         >
           {busy && <Spinner />}
-          {active ? "Stop bot" : "Connect voice agent"}
+          {active ? "Disconnect agent" : "Connect voice agent"}
         </button>
       )}
       {w.isOperator &&
@@ -192,7 +192,7 @@ function JoinControls({ meeting }: { meeting: Meeting }) {
         )}
       {w.isOperator && !w.manualJoinReady && (
         <small>
-          Configure Attendee and the public backend URL to enable meeting voice.
+          Meeting voice is not configured. Contact your workspace administrator to enable it.
         </small>
       )}
       <ErrorNotice text={error} />
@@ -229,7 +229,7 @@ function Memory({ orgId }: { orgId: string }) {
       <div>
         <h3>Workspace memory · last 14 days</h3>
         <p>
-          Updated automatically after meetings. Ask Sia about progress,
+          Updated automatically after meetings. Ask Audiva about progress,
           decisions, or blockers.
         </p>
         <ErrorNotice text={error} />
@@ -276,10 +276,10 @@ export function Meetings({ testGround = false }: { testGround?: boolean }) {
     <>
       <PageTitle
         eyebrow="MAKE ROOM FOR BETTER CONVERSATIONS"
-        title={testGround ? "Meetings test ground" : "Meetings bot"}
+        title={testGround ? "Meeting preview" : "Meeting assistant"}
         description={
           testGround
-            ? "Open an assigned Google Meet and connect the bot to try a conversation. Test calls use real meetings."
+            ? "Open an assigned Google Meet and connect the assistant to try a conversation. Test calls use real meetings."
             : "Meeting schedules and agendas for your workspace."
         }
         action={
@@ -297,7 +297,7 @@ export function Meetings({ testGround = false }: { testGround?: boolean }) {
         <div>
           <b>Your meeting voice assistant</b>
           <p>
-            Enable auto-join for scheduled meetings, or connect now. Admit Sia
+            Enable auto-join for scheduled meetings, or connect now. Admit Audiva
             from the host account when requested. It listens quietly until you
             address it by name, for example “Hey {w.meetingVoiceName}, what did
             we decide?”

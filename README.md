@@ -1,4 +1,6 @@
-# Sia Frontend
+# Audiva
+
+Web application for the Audiva voice operations platform.
 
 ## Architecture
 
@@ -21,7 +23,7 @@ The frontend is a feature-oriented operating surface for clinic and meeting work
 ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
 │ CLINIC           │  │ MEETINGS         │  │ CONVERSATION     │
 │ Setup / register │  │ Inbox / meetings │  │ Agents / context │
-│ Test ground      │  │ Live test ground │  │ Test ground      │
+│ Voice preview      │  │ Live voice preview │  │ Voice preview      │
 └──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
 
@@ -66,7 +68,7 @@ The frontend is a feature-oriented operating surface for clinic and meeting work
 ```
 
 - **Configuration feeds execution:** clinic context is validated by the backend and supplies the facts, doctors, and scheduling rules used during calls.
-- **Real workflow:** the test ground uses the operational clinic pipeline. Confirmed actions can create or change saved appointments.
+- **Real workflow:** the voice preview uses the operational clinic pipeline. Confirmed actions can create or change saved appointments.
 - **Conversation visibility:** transcription and speech events provide a view of the live interaction; the backend owns intent, availability, confirmation, and persistence.
 - **Visit completion:** the register is organized by appointment day. Counts, clinic-local dates, and per-entry visit eligibility come from the backend.
 - **Authoritative refresh:** a visit update is followed by a fresh register read. The client does not independently derive booking rules or adjust aggregate counts.
@@ -162,8 +164,8 @@ The frontend is a feature-oriented operating surface for clinic and meeting work
 - **Control path:** dashboard actions request participation changes; backend capabilities determine whether manual controls are available.
 - **Audio path:** participant audio bypasses the dashboard. Attendee exchanges audio directly with the backend meeting pipeline.
 - **Operational feedback:** status refreshes expose provider and processing state so a requested join is distinguishable from actual participation.
-- **Real-meeting testing:** the meeting test ground operates on assigned Google Meets and can join a live meeting.
-- **Workspace memory:** the regular meetings view displays dated backend-maintained context covering fourteen UTC calendar days. Summarization, retries, and retention remain backend work; the test-ground view omits memory to keep participation controls focused.
+- **Real-meeting testing:** the meeting voice preview operates on assigned Google Meets and can join a live meeting.
+- **Workspace memory:** the regular meetings view displays dated backend-maintained context covering fourteen UTC calendar days. Summarization, retries, and retention remain backend work; the preview view omits memory to keep participation controls focused.
 
 ## 6. Supporting business components
 
@@ -172,13 +174,13 @@ The frontend is a feature-oriented operating surface for clinic and meeting work
 | Template library | Exposes the platform-managed catalog used to configure agents. |
 | Team management | Presents membership and invitation capabilities supplied by the backend; invitation delivery remains a separate user action. |
 | Integration credentials | Supports authorized creation and revocation, with raw credentials revealed at creation. |
-| Website integration | Keeps the long-lived credential on the customer server; the browser receives a limited, bot-bound voice grant. |
+| Website integration | Keeps the long-lived credential on the customer server; the browser receives a limited, agent-bound voice grant. |
 | Shared theme | Semantic color variables cover both light and dark modes; preference initialization happens before the main interface renders. |
 | Shared UI primitives | Keep asynchronous actions, dialogs, errors, and feedback consistent across features. |
 
 ## Design decisions
 
-- **Feature ownership shapes navigation:** Clinic Bot, Meetings Bot, and Other Bots each keep their operational screens and test ground together. Supporting administration sits under workspace settings.
+- **Feature ownership shapes navigation:** Healthcare, Meetings, and Voice agents each keep their operational screens and voice preview together. Supporting administration sits under workspace settings.
 - **One source of business policy:** permissions, classification, assignment choices, patient counts, and action eligibility are delivered by the backend.
 - **Explicit lifecycle ownership:** components own browser resources and cancel obsolete work, preventing a workspace switch or late response from reviving an outdated interaction.
 - **Separate meeting control from media:** the dashboard operates the assistant while Attendee and the backend carry the conversation.
@@ -200,8 +202,8 @@ The frontend environment contains the backend origin. Browser voice fetches temp
 
 ## Clinic phone calls
 
-Open **Clinic Bot → Phone calls** to select a clinic assistant, view incoming and
-outgoing calls, and start an outbound call. The existing browser test ground stays
+Open **Healthcare → Phone calls** to select a clinic assistant, view incoming and
+outgoing calls, and start an outbound call. The existing browser voice preview stays
 available from this screen. Owners/admins can dial and review uncertain call outcomes;
 members can view history. Platform operators with workspace management access can
 assign the Exotel number, enable/disable its route, and copy its private connection URL.

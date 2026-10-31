@@ -16,7 +16,7 @@ export function Patients() {
   return (
     <>
       <PageTitle
-        eyebrow="CLINIC BOT"
+        eyebrow="HEALTHCARE"
         title="Daily patients"
         description="Patients registered for each appointment day. Mark their visit when they see the doctor."
       />

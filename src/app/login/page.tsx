@@ -51,21 +51,21 @@ function LoginForm() {
         <Logo />
         <div className="login-story-main">
           <div className="pill light">
-            <Sparkles size={13} /> A little more human.
+            <Sparkles size={13} /> Voice operations, connected.
           </div>
           <h1>
-            Great conversations.
+            Every conversation.
             <br />
-            <span className="login-accent">Without limits.</span>
+            <span className="login-accent">A clear next step.</span>
           </h1>
           <p>
-            Give your business a voice that listens, understands, and makes
-            every interaction matter.
+            Manage voice agents, coordinate meetings, and run customer outreach
+            from one workspace.
           </p>
           <div className="login-wave">
             <Wave />
             <span>
-              <i /> The sound of a better experience
+              <i /> Conversations that move work forward
             </span>
           </div>
           <div className="login-features">
@@ -77,18 +77,18 @@ function LoginForm() {
             </span>
           </div>
         </div>
-        <small>YOUR BUSINESS. YOUR CONTEXT. YOUR VOICE.</small>
+        <small>VOICE AGENTS · MEETINGS · OUTREACH</small>
       </section>
       <section className="login-form-panel">
         <div className="login-form-wrap">
-          <span className="eyebrow">WELCOME TO SIA</span>
+          <span className="eyebrow">WELCOME TO AUDIVA</span>
           <h2>
-            {register ? "Let’s build your voice." : "Good to hear from you."}
+            {register ? "Create your account" : "Sign in to Audiva"}
           </h2>
           <p>
             {register
               ? "Create an account and your first workspace."
-              : "Sign in to your voice agent workspace."}
+              : "Access your agents, meetings, and campaigns."}
           </p>
           {search.get("expired") && (
             <div className="notice">
@@ -141,7 +141,7 @@ function LoginForm() {
             </button>
           </form>
           <div className="auth-switch">
-            {register ? "Already have an account?" : "New to Sia?"}{" "}
+            {register ? "Already have an account?" : "New to Audiva?"}{" "}
             <button
               onClick={() => {
                 setRegister(!register);
@@ -156,7 +156,7 @@ function LoginForm() {
           </div>
         </div>
         <small className="login-footer">
-          Thoughtful voice experiences start here.
+          Audiva · Voice operations for your business
         </small>
       </section>
     </div>
